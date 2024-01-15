@@ -3,8 +3,7 @@ import { BrowserRouter as Router,Navigate, Route, Routes } from 'react-router-do
 
 import LoginPage from './components/LoginPage';
 import AdminPage from './components/AdminPage';
-// import About from './components/About';
-// import Contact from './components/Contact';
+import Post from './components/Posts/Post';
 
 const App = () => {
   return (
@@ -13,8 +12,7 @@ const App = () => {
         <Routes>
           <Route path="/"  element={<LoginPage/>} />
           <Route path="/admin"  element={<AdminPage/>} />
-          {/* <Route path="/about" element={About} /> */}
-          {/* <Route path="/contact" element={Contact} /> */}
+          <Route path="/post"  element={<Post/>} />
           <Route path="*" element={<Navigate to="/" />} />
 
         </Routes>

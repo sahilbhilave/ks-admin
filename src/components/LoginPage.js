@@ -9,6 +9,9 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [session, setSession] = useState(null)
+  const [logging, setlogging] = useState(false);
+
   const navigate = useNavigate();
 
   const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
@@ -16,21 +19,31 @@ const LoginPage = () => {
 
   const supabase = createClient(supabaseUrl, supabaseKey);
 
+  //Check for authentication
   useEffect(() => {
-    const checkAuthenticatedUser = async () => {
-      const user = supabase.auth.user;
-      console.log("ASDASDASDASD"+user);
-      if (user) {
-        navigate('/admin');
-      }
-    };
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
 
-    checkAuthenticatedUser();
-  }, [navigate, supabase]);
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  if (!session) {
+  }
+  else {
+    if(logging == false)
+    navigate('/admin');
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       const { user, error } = await supabase.auth.signInWithPassword({
         email: email,
@@ -40,8 +53,8 @@ const LoginPage = () => {
       if (error) {
         throw error;
       }
-
-      setLoading(true);
+      setlogging(true);
+      
       console.log('User logged in:', user);
       setError('');
 
@@ -95,7 +108,7 @@ const LoginPage = () => {
 
         {loading && (
           <div className="loading">
-            <div className='loading-text'>Valid credentials! Logging In..</div>
+            <div className='loading-text'>Authenticating..</div>
             <div className='spinner'></div>
           </div>
         )}

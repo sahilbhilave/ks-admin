@@ -1,0 +1,185 @@
+.post-container {
+    max-width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .header h1 {
+    margin: 0;
+  }
+  
+  .top-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .top-right .publish-button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .top-right .publish-button i {
+    margin-right: 8px;
+  }
+  
+  .post-details {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .post-details label {
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .text-styling-options {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .text-styling-options label {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+    color: #333;
+  }
+  
+  .text-styling-options input,
+  .text-styling-options button {
+    margin-right: 10px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .formatting-options button {
+    margin-right: 10px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .publish-button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .publish-button i {
+    margin-right: 8px;
+  }
+  
+  .html-preview {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  .html-preview h2 {
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .html-preview div {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+  }
+  
+  .post-textarea {
+    background-color: #fff;
+    width: 98%;
+    height: 400px; /* Set the desired height */
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    line-height: 1.6;
+    resize: vertical;
+    overflow-y: auto; /* Add this line to enable vertical scroll */
+  }
+
+  .post-textarea-container {
+    max-height: 550px;
+  }
+  
+  .color-indicator {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    margin-left: 5px;
+  }
+  
+  .post-textarea-container {
+    margin-top: 10px;
+    overflow: auto;
+    max-height: 550px;
+  }
+  
+
+
+  .category-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+  
+  .category-container label {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .category-dropdown {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+  }
+
+  .admin-button {
+    background-color: #3498db; /* Set the background color */
+    color: #fff; /* Set the text color */
+    padding: 8px 16px; /* Add padding for better appearance */
+    border: none; /* Remove the border */
+    border-radius: 4px; /* Add some border-radius for rounded corners */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    margin-right: 16px; /* Add some margin to the right for spacing */
+  }
+  
+  .admin-button:hover {
+    background-color: #2980b9; /* Darken the background color on hover */
+  }

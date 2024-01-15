@@ -16,11 +16,35 @@ const AdminPage = () => {
   const [category, setCategory] = useState('Organic Farming');
   const [language, setLanguage] = useState('English');
   const [posts, setPosts] = useState([]);
+  const [session, setSession] = useState(null)
+
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchPosts();
   }, [category, language]);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  if (!session) {
+    navigate('/');
+  }
+  else {
+    
+  }
+
 
   const fetchPosts = async () => {
     try {
@@ -41,7 +65,7 @@ const AdminPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    navigate('/createblog');
+    navigate('/post');
   };
 
   const handleDelete = async (postId) => {
@@ -89,7 +113,7 @@ const AdminPage = () => {
       
       <form onSubmit={handleSubmit} className="admin-form">
         {/* Form input fields... */}
-        <button type="submit">Create a new Post</button>
+        <button onClick={handleSubmit} type="submit">Create a new Post</button>
       </form>
 
       <div className="category-container">
