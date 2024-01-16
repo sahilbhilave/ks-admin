@@ -1,61 +1,90 @@
 import React, { useState, useEffect } from 'react';
-import '../Styles/Posts.css';
-import { useNavigate } from 'react-router-dom';
+import '../Styles/Posts.css'; 
+import { useNavigate, useLocation } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const Post = () => {
+const EditPost = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [content, setContent] = useState('');
+  const [contents, changeContent] = useState('');
   const [htmlContent, setHtmlContent] = useState('');
   const [category, setCategory] = useState('Organic Farming');
   const [language, setLanguage] = useState('English');
-  const [session, setSession] = useState(null)
+  const [session, setSession] = useState(null);
   const [selectedFontColor, setSelectedFontColor] = useState('black');
   const [lineSpacing, setLineSpacing] = useState('1.5'); // Default line spacing is 1.5
   const navigate = useNavigate();
+  const location = useLocation();
+  const [message,setMesssage] = useState('Nothing was updated');
+  const [postID, setPostID] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingPosts, setloadingPosts] = useState(true);
 
+  const fetchPostData = async (postId) => {
+    try {
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('*')
+        .eq('id', postId)
+        .single();
 
+      if (error) {
+        console.error('Error fetching post data:', error);
+      } else {
+        const { title, description, content, language, category } = data;
+        setTitle(title);
+        setDescription(description);
+        setContent(content);
+        setLanguage(language);
+        setCategory(category);
+        console.log("POSTSA"+postId);
+        setPostID(postId);
+      }
+    } catch (error) {
+      console.error('Error fetching post data:', error);
+    }
+    setloadingPosts(false);
+  };
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      
-    })
+      setSession(session);
+  
+      if (!session) {
+        navigate('/');
+      } else {
+        // Check if postId is present in the URL
+        const postId = new URLSearchParams(location.search).get('postId');
+        if (postId) {
+          // Fetch data based on postId
+          fetchPostData(postId);
+        }
+      }
+    });
+  
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  
+    return () => subscription.unsubscribe();
+  }, []);
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
-
-  if (!session) {
-    navigate('/');
-  }
-  else {
-    
-  }
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
-
-  
 
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
   };
 
   const handleContentChange = (e) => {
-    setContent(e.target.innerHTML);
+    changeContent(e.target.innerHTML);
   };
 
   const handleBoldClick = () => {
@@ -136,50 +165,54 @@ const Post = () => {
   };
 
   
-  const handlePublish = async () => {
-    if (!title || !description || !content) {
+  const handleUpdate = async () => {
+    if (!title || !description || !contents) {
+      setMesssage("Nothing was updated")
       setShowPopup(true);
+      setTimeout(() => {
+        setShowPopup(false);
+      }, 1000);
       return;
     }
-
-    const fullContent = `${title}\n${description}\n\n${content}`;
+  
+    const fullContent = `${title}\n${description}\n\n${contents}`;
     setHtmlContent(fullContent);
     setLoading(true);
+    console.log("ASDASdas"+postID);
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-const userId = user?.id;
-
-
+      const { data: { user } } = await supabase.auth.getUser();
+      const userId = user?.id;
+  
       const { data, error } = await supabase
-        .from('blogs') 
-        .insert([
-          {
-            title: title,
-            description: description,
-            content: content,
-            language: language,
-            category: category,
-            user_id: userId,
-          },
-        ]);
-
+        .from('blogs')
+        .update({
+          title: title,
+          description: description,
+          content: contents,
+          language: language,
+          category: category,
+          user_id: userId,
+        })
+        .eq('id', postID);
+  
       if (error) {
-        console.error('Error inserting data:', error);
-      } else {
-        console.log('Data inserted successfully:', data);
+        console.error('Error updating data:', error);
         
-        setShowPopup(true);
+      } else {
+        console.log('Data updated successfully:', data);
 
-
+  
         setTimeout(() => {
           setLoading(false);
           navigate('/admin');
         }, 1000);
       }
     } catch (error) {
-      console.error('Error inserting data:', error.message);
+      console.error('Error updating data:', error.message);
+      setLoading(false);
     }
   };
+  
 
   return (
     <div className="post-container">
@@ -189,16 +222,19 @@ const userId = user?.id;
         </button>
         <h1>Create a New Blog Post</h1>
         <div className="top-right">
-          <button onClick={handlePublish} className="publish-button">
-            <i className="fas fa-cloud-upload-alt"></i> Publish
+          <button onClick={handleUpdate} className="publish-button">
+            <i className="fas fa-cloud-upload-alt"></i> Update
           </button>
         </div>
       </div>
-      {showPopup && <PopupContainer id="popup-message" message="Publishing.." />}
-
+      {showPopup && <div id="popup-message" ><h1>{message}</h1></div>}
+      {loadingPosts && (  <div>
+                    <div className='loading'>Loading <div className="spinner"></div></div>
+                    
+                  </div>)}
       {loading && (
           <div className="loading">
-            <div className='loading-text'>Publishing</div>
+            <div className='loading-text'>Updating</div>
             <div className='spinner'></div>
           </div>
         )}
@@ -283,15 +319,16 @@ const userId = user?.id;
       </div>
 
       <div className="post-textarea-container">
-        <div
-          contentEditable
-          className="post-textarea"
-          onInput={handleContentChange}
-          style={{ lineHeight: `${lineSpacing}em` }}
-        ></div>
-      </div>
+  <div
+    contentEditable
+    className="post-textarea"
+    onInput={handleContentChange}
+    style={{ lineHeight: `${lineSpacing}em` }}
+    dangerouslySetInnerHTML={{ __html: content }}
+  ></div>
+</div>
     </div>
   );
 };
 
-export default Post;
+export default EditPost;

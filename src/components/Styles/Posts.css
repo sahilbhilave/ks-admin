@@ -183,3 +183,49 @@
   .admin-button:hover {
     background-color: #2980b9; /* Darken the background color on hover */
   }
+
+
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  z-index: 1;
+}
+.spinner {
+  margin-left: 10px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #557A46;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+#popup-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 0, 0, 0.7); /* Red background with some transparency */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  font-weight: bold;
+  font-size: 90;
+  color: white;
+}

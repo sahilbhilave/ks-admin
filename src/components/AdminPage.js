@@ -1,4 +1,3 @@
-// AdminPage.js
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +15,10 @@ const AdminPage = () => {
   const [category, setCategory] = useState('Organic Farming');
   const [language, setLanguage] = useState('English');
   const [posts, setPosts] = useState([]);
-  const [session, setSession] = useState(null)
+  const [session, setSession] = useState(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [loadingPosts, setloadingPosts] = useState(true);
+  const [deletePostId, setDeletePostId] = useState(null);
 
   const navigate = useNavigate();
 
@@ -26,31 +28,23 @@ const AdminPage = () => {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-    })
+      setSession(session);
+    });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
+      setSession(session);
+    });
 
-    return () => subscription.unsubscribe()
-  }, [])
-
-  if (!session) {
-    navigate('/');
-  }
-  else {
-    
-  }
-
+    return () => subscription.unsubscribe();
+  }, []);
 
   const fetchPosts = async () => {
     try {
       const { data, error } = await supabase
         .from('blogs')
-        .select('*')
+        .select('id,title,description,category')
         .eq('category', category)
         .eq('language', language);
 
@@ -62,18 +56,25 @@ const AdminPage = () => {
     } catch (error) {
       console.error('Error fetching posts:', error);
     }
+    setloadingPosts(false);
+    
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = () => {
     navigate('/post');
   };
 
-  const handleDelete = async (postId) => {
+  const handleDelete = (postId) => {
+    setDeletePostId(postId);
+    setDeleteConfirmation(true);
+  };
+
+  const handleDeleteConfirmation = async () => {
     try {
       const { error } = await supabase
         .from('blogs')
         .delete()
-        .eq('id', postId);
+        .eq('id', deletePostId);
 
       if (error) {
         console.error('Error deleting post:', error);
@@ -82,11 +83,20 @@ const AdminPage = () => {
       }
     } catch (error) {
       console.error('Error deleting post:', error);
+    } finally {
+      setDeleteConfirmation(false);
+      setDeletePostId(null);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setDeletePostId(null);
+    setDeleteConfirmation(false);
   };
 
   const handleEdit = (postId) => {
     console.log(`Editing post with ID: ${postId}`);
+    navigate(`/editpost?postId=${postId}`);
   };
 
   const handleLogout = async () => {
@@ -95,7 +105,7 @@ const AdminPage = () => {
       if (error) {
         console.error('Logout error:', error.message);
       } else {
-        navigate('/'); 
+        navigate('/');
       }
     } catch (error) {
       console.error('Logout error:', error.message);
@@ -112,7 +122,6 @@ const AdminPage = () => {
       <h1 className="admin-header">Welcome to the Admin Page!</h1>
       
       <form onSubmit={handleSubmit} className="admin-form">
-        {/* Form input fields... */}
         <button onClick={handleSubmit} type="submit">Create a new Post</button>
       </form>
 
@@ -145,18 +154,33 @@ const AdminPage = () => {
           <option value="Food processing">Food processing</option>
         </select>
       </div>
-
-
+      
       <div className="existing-posts">
         <h2>Existing Posts ({posts.length})</h2>
+        {loadingPosts && (  <div>
+                    <div className='loading'>Loading <div className="spinner"></div></div>
+                    
+                  </div>)}
         {posts.map((post) => (
           <div key={post.id} className="post-card">
             <h3>{post.title}</h3>
             <p>{post.description}</p>
             <p>Category: {post.category}</p>
             <div className="post-actions">
-              <button className="delete-button" onClick={() => handleDelete(post.id)}>
-                Delete
+              <button
+                className="delete-button"
+                onClick={() => handleDelete(post.id)}
+              >
+                {deleteConfirmation && deletePostId === post.id ? (
+                  <div>
+                    <div>Deleting Post</div>
+                    {/* <div className="spinner"></div> */}
+                  </div>
+                ) : (
+                  'Delete'
+                )}
+
+                
               </button>
               <button className="edit-button" onClick={() => handleEdit(post.id)}>
                 Edit
@@ -165,6 +189,22 @@ const AdminPage = () => {
           </div>
         ))}
       </div>
+
+      {deleteConfirmation && (
+  <div className="modal-container">
+    <div className="delete-modal">
+      <p>Are you sure you want to delete this post?</p>
+      <div className="modal-buttons">
+        <button className="yes-button" onClick={handleDeleteConfirmation}>
+          <i className="fas fa-check"></i> Yes
+        </button>
+        <button className="cancel-button" onClick={handleCancelDelete}>
+          <i className="fas fa-times"></i> Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };
