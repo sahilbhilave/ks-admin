@@ -1,0 +1,145 @@
+.weather-entry-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 90%; 
+    max-height: 80vh; 
+    overflow-y: auto;
+    margin: auto;
+    transform: translate(-50%, -50%);
+    background-color: #f8f8f8;
+    padding: 30px;
+    padding-top: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .back{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+    z-index: 1;
+  }
+  
+  .weather-entry-form h3 {
+    text-align: center;
+  }
+  
+  .form-columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .form-column {
+    flex-basis: 100%; /* Full width on smaller screens */
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .weather-entry-form label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .weather-entry-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  
+  .icon {
+    margin-right: 10px;
+  }
+  textarea{
+    width: 99%;
+    resize: none;
+    height:100px;
+  }
+  input
+  {
+    height: 40px;
+  }
+
+  .heading {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.heading h3 {
+    display: inline-block;
+    font-size: 23px;
+}
+
+.cancel {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
+    
+    display: inline-block;
+    float: right;
+    height: 50px;
+}
+
+.create-new-button
+{
+    background-color: #4caf50;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.cancel:hover{
+    background-color: #9c3327;
+}
+
+.submit {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    display: inline-block;
+    float: right;
+    height: 50px;
+
+}
+.submit:hover{
+    background-color: #27ae60;
+}
+
+
+
+  
+  @media (min-width: 600px) {
+    .form-column {
+      flex-basis: calc(50% - 10px); /* Adjust for two columns on larger screens */
+    }
+  }
+  

@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
-import './Styles/AdminPage.css';
+import '../Styles/AdminPage.css';
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const AdminPage = () => {
+const AdminPosts = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [content, setContent] = useState('');
-  const [images, setImages] = useState('');
   const [category, setCategory] = useState('Organic Farming');
   const [language, setLanguage] = useState('English');
   const [posts, setPosts] = useState([]);
+  const [loadingPosts, setLoadingPosts] = useState(true);
   const [session, setSession] = useState(null);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-  const [loadingPosts, setloadingPosts] = useState(true);
   const [deletePostId, setDeletePostId] = useState(null);
 
   const navigate = useNavigate();
@@ -44,7 +42,7 @@ const AdminPage = () => {
     try {
       const { data, error } = await supabase
         .from('blogs')
-        .select('id,title,description,category')
+        .select('id, title, description, category')
         .eq('category', category)
         .eq('language', language);
 
@@ -55,9 +53,9 @@ const AdminPage = () => {
       }
     } catch (error) {
       console.error('Error fetching posts:', error);
+    } finally {
+      setLoadingPosts(false);
     }
-    setloadingPosts(false);
-    
   };
 
   const handleSubmit = () => {
@@ -99,28 +97,8 @@ const AdminPage = () => {
     navigate(`/editpost?postId=${postId}`);
   };
 
-  const handleLogout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.error('Logout error:', error.message);
-      } else {
-        navigate('/');
-      }
-    } catch (error) {
-      console.error('Logout error:', error.message);
-    }
-  };
-
   return (
     <div className="admin-container">
-      <div className="logout-container">
-        <button className="logout-button" onClick={handleLogout}>
-          Logout
-        </button>
-      </div>
-      <h1 className="admin-header">Welcome to the Admin Page!</h1>
-      
       <form onSubmit={handleSubmit} className="admin-form">
         <button onClick={handleSubmit} type="submit">Create a new Post</button>
       </form>
@@ -154,43 +132,41 @@ const AdminPage = () => {
           <option value="Food processing">Food processing</option>
         </select>
       </div>
-      
-      <div className="existing-posts">
-        <h2>Existing Posts ({posts.length})</h2>
-        {loadingPosts && (  <div>
-                    <div className='loading'>Loading <div className="spinner"></div></div>
-                    
-                  </div>)}
-        {posts.map((post) => (
-          <div key={post.id} className="post-card">
-            <h3>{post.title}</h3>
-            <p>{post.description}</p>
-            <p>Category: {post.category}</p>
-            <div className="post-actions">
-              <button
-                className="delete-button"
-                onClick={() => handleDelete(post.id)}
-              >
-                {deleteConfirmation && deletePostId === post.id ? (
-                  <div>
-                    <div>Deleting Post</div>
-                    {/* <div className="spinner"></div> */}
-                  </div>
-                ) : (
-                  'Delete'
-                )}
-
-                
-              </button>
-              <button className="edit-button" onClick={() => handleEdit(post.id)}>
-                Edit
-              </button>
-            </div>
+    <div className="existing-posts">
+      <h2>Existing Posts ({posts.length})</h2>
+      {loadingPosts && (
+        <div>
+          <div className="loading">
+            Loading <div className="spinner"></div>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
+      {posts.map((post) => (
+        <div key={post.id} className="post-card">
+          <h3>{post.title}</h3>
+          <p>{post.description}</p>
+          <p>Category: {post.category}</p>
+          <div className="post-actions">
+            <button
+              className="delete-button"
+              onClick={() => handleDelete(post.id)}
+            >
+              {deleteConfirmation && deletePostId === post.id ? (
+                <div>
+                  <div>Deleting Post</div>
+                </div>
+              ) : (
+                'Delete'
+              )}
+            </button>
+            <button className="edit-button" onClick={() => handleEdit(post.id)}>
+              Edit
+            </button>
+          </div>
+        </div>
+      ))}
 
-      {deleteConfirmation && (
+{deleteConfirmation && (
   <div className="modal-container">
     <div className="delete-modal">
       <p>Are you sure you want to delete this post?</p>
@@ -206,7 +182,9 @@ const AdminPage = () => {
   </div>
 )}
     </div>
+    </div>
+    
   );
 };
 
-export default AdminPage;
+export default AdminPosts;

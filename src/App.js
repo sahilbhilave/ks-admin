@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router,Navigate, Route, Routes } from 'react-router-dom';
 
 import LoginPage from './components/LoginPage';
-import AdminPage from './components/AdminPage';
+import AdminPage from './components/Admin/AdminPage';
 import Post from './components/Posts/Post';
 import EditPost from './components/Posts/EditPost';
 
