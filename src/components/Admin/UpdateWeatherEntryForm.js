@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import '../Styles/WeatherForm.css';
-import { useNavigate,useLocation } from 'react-router-dom';
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const WeatherEntryForm = ({ onClose, onWeatherEntryCreated, fetchWeatherData }) => {
-  const navigate = useNavigate();
+const UpdateWeatherEntryForm = ({ postID,onClose, onWeatherEntryCreated, fetchWeatherData }) => {
+
+ 
 
   const [formData, setFormData] = useState({
     date: '',
@@ -24,40 +24,68 @@ const WeatherEntryForm = ({ onClose, onWeatherEntryCreated, fetchWeatherData }) 
     tip: '',
   });
 
+  useEffect(() => {
+
+    console.log("ASDASD"+postID);
+    const fetchPost = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('weather_data')
+          .select('*')
+          .eq('id', postID)
+          .single();
+
+        if (error) {
+          console.error('Error fetching post:', error);
+        } else {
+          setFormData(data);
+        }
+      } catch (error) {
+        console.error('Error fetching post:', error);
+      }
+    };
+
+    fetchPost();
+  }, [postID]);
+
+  const formatDate = (inputDate) => {
+    const [year, month, day] = inputDate.split('-');
+    return `${day}/${month}/${year}`;
+  };
+  
+  const formatTime = (inputTime) => {
+    const [hour, minute] = inputTime.split(':');
+    return `${hour}:${minute}`;
+  };
+  
+  const formatTime24 = (inputTime) => {
+    const [hour, minute] = inputTime.split(':');
+    return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const formattedDate = formatDate(formData.date);
-      const formattedTime = formatTime(formData.time);
-      const formattedSunrise = formatTime(formData.sunrise);
-      const formattedSunset = formatTime(formData.sunset);
-      
-      // console.log("Date"+formattedDate);
-      // console.log("Time"+formattedTime);
-      // console.log("Date"+formattedSunrise);
-      // console.log("Time"+formattedSunset);
-      // console.log("Date"+formData.temperature);
-      // console.log("Time"+formData.wind_speed);
-      // console.log("Date"+formData.wind_direction);
-      // console.log("Time"+formData.humidity);
-      // console.log("Time"+formData.weather);
-      // console.log("Time"+formData.tip);
-      // console.log("Time"+formData.rain_chances);
+    const formattedTime = formatTime(formData.time);
+    const formattedSunrise = formatTime(formData.sunrise);
+    const formattedSunset = formatTime(formData.sunset);
 
-      const { data: { user } } = await supabase.auth.getUser()
+  
+      const { data: { user } } = await supabase.auth.getUser();
       const userId = user?.id;
       const numericFormData = {
-        ...formData,
-        date: ""+formattedDate,
-        time: ""+formattedTime,
-        sunrise: formattedSunrise,
-        sunset: formattedSunset,
+        time: "" + formattedTime,
+        sunrise:""+ formattedSunrise,
+        sunset: ""+formattedSunset,
         temperature: parseFloat(formData.temperature),
         wind_speed: parseFloat(formData.wind_speed),
         wind_direction: formData.wind_direction,
@@ -65,32 +93,27 @@ const WeatherEntryForm = ({ onClose, onWeatherEntryCreated, fetchWeatherData }) 
         weather: formData.weather,
         tip: formData.tip,
         rain_chances: formData.rain_chances,
-        user_id: userId
+        user_id: userId,
       };
-
-      const { data, error } = await supabase.from('weather_data').upsert([numericFormData]);
-
+  
+      const { error } = await supabase
+        .from('weather_data')
+        .update(numericFormData)
+        .eq('id', postID);
+  
       if (error) {
-        console.error('Error creating weather entry:', error);
+        console.error('Error updating weather entry:', error);
       } else {
         onClose();
-        fetchWeatherData(); 
+        console.log("Bazinga");
+        fetchWeatherData();
       }
-
     } catch (error) {
-      console.error('Error creating weather entry:', error);
+      console.error('Error updating weather entry:', error);
     }
   };
 
-  const formatDate = (inputDate) => {
-    const [year, month, day] = inputDate.split('-');
-    return `${day}/${month}/${year}`;
-  };
-
-  const formatTime = (inputTime) => {
-    const [hour, minute] = inputTime.split(':');
-    return `${hour}:${minute}`;
-  };
+  
 
   return (
     <div className="back">
@@ -102,10 +125,10 @@ const WeatherEntryForm = ({ onClose, onWeatherEntryCreated, fetchWeatherData }) 
         <form onSubmit={handleSubmit}>
           <div className="form-columns">
             <div className="form-column">
-              <div className="form-group">
+              {/* <div className="form-group">
                 <label>Date:</label>
                 <input type="date" name="date" value={formData.date} onChange={handleChange} required />
-              </div>
+              </div> */}
 
               <div className="form-group">
                 <label>Time:</label>
@@ -163,14 +186,15 @@ const WeatherEntryForm = ({ onClose, onWeatherEntryCreated, fetchWeatherData }) 
                   rows="4"
                 />
               </div>
-              <button className='submit' type="submit">Submit</button>
+              <button className='submit' type="submit">Update</button>
             </div>
+           
           </div>
-          
+         
         </form>
       </div>
     </div>
   );
 };
 
-export default WeatherEntryForm;
+export default UpdateWeatherEntryForm;

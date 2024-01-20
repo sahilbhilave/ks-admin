@@ -65,6 +65,8 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
+  padding-bottom:5px;
+  padding-top:0px;
   margin-bottom: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -85,6 +87,8 @@
 
 .delete-button,
 .edit-button {
+  /* margin-top: 10px;
+  margin-bottom: 10px; */
   padding: 12px;
   cursor: pointer;
   border: none;
@@ -99,7 +103,7 @@
 }
 
 .edit-button {
-  background-color: #5bc0de;
+  background-color: #557A46;
   color: #fff;
 }
 
@@ -235,3 +239,23 @@ button {
   background-color: #F2EE9D;
   /* //color: #fff; */
 }
+
+.date{
+  /* margin-bottom: 0px; */
+  font-style: italic;
+  font-weight: bold;
+  padding: 5px;
+  color: white;
+  background-color: #8C3333;
+  /* padding-left: 10px; */
+  text-align: center;
+  border-radius: 5em;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 1);
+  transition: box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.date:hover{
+  box-shadow: 0 0px 10px rgba(0, 0, 0, 1);
+}
+

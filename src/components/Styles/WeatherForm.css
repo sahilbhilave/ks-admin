@@ -116,7 +116,7 @@
 }
 
 .submit {
-    background-color: #2ecc71;
+    background-color: #557A46;
     color: white;
     border: none;
     padding: 15px;
@@ -124,7 +124,7 @@
     cursor: pointer;
     font-size: 15px;
     transition: background-color 0.3s ease;
-    margin-top: 20px;
+    margin-bottom: 20px;
     display: inline-block;
     float: right;
     height: 50px;
@@ -143,3 +143,18 @@
     }
   }
   
+  .weather-info p {
+    margin: 8px 0;
+    font-size: 16px;
+    color: #333;
+    padding-bottom: 5px;
+  }
+  
+  .weather-info .label {
+    font-weight: bold;
+    
+  }
+  
+  .weather-info strong {
+    font-weight: normal; /* You can adjust this if you want the values to have a different boldness */
+  }

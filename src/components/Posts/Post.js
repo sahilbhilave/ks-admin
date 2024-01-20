@@ -16,7 +16,7 @@ const Post = () => {
   const [language, setLanguage] = useState('English');
   const [session, setSession] = useState(null)
   const [selectedFontColor, setSelectedFontColor] = useState('black');
-  const [lineSpacing, setLineSpacing] = useState('1.5'); // Default line spacing is 1.5
+  const [lineSpacing, setLineSpacing] = useState('1.5'); 
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -132,7 +132,7 @@ const Post = () => {
     document.execCommand('lineHeight', false, e.target.value);
   };
  const handleAdminPageNavigation = () => {
-    navigate('/admin'); // Navigate to the '/admin' page
+    navigate('/admin');
   };
 
   
@@ -227,9 +227,9 @@ const userId = user?.id;
           onChange={(e) => setCategory(e.target.value)}
         >
           <option value="Organic Farming">Organic Farming</option>
-          <option value="Animal husbandry">Animal husbandry</option>
-          <option value="Nourishment garden">Nourishment garden</option>
-          <option value="Food processing">Food processing</option>
+          <option value="Animal Husbandry">Animal Husbandry</option>
+          <option value="Nourishment Garden">Nourishment Garden</option>
+          <option value="Food Processing">Food Processing</option>
         </select>
       </div>
 

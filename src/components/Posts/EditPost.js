@@ -166,14 +166,7 @@ const EditPost = () => {
 
   
   const handleUpdate = async () => {
-    if (!title || !description || !contents) {
-      setMesssage("Nothing was updated")
-      setShowPopup(true);
-      setTimeout(() => {
-        setShowPopup(false);
-      }, 1000);
-      return;
-    }
+    
   
     const fullContent = `${title}\n${description}\n\n${contents}`;
     setHtmlContent(fullContent);
@@ -263,9 +256,9 @@ const EditPost = () => {
           onChange={(e) => setCategory(e.target.value)}
         >
           <option value="Organic Farming">Organic Farming</option>
-          <option value="Animal husbandry">Animal husbandry</option>
-          <option value="Nourishment garden">Nourishment garden</option>
-          <option value="Food processing">Food processing</option>
+          <option value="Animal Husbandry">Animal Husbandry</option>
+          <option value="Nourishment Garden">Nourishment Garden</option>
+          <option value="Food Processing">Food Processing</option>
         </select>
       </div>
 
@@ -276,7 +269,7 @@ const EditPost = () => {
         </label>
         <label>
           <i className="fas fa-align-left"></i> Description:
-          <textarea value={description} onChange={handleDescriptionChange} style={{ width: '99%', height: '80px', resize: 'none'}} />
+          <textarea  value={description} onChange={handleDescriptionChange} style={{ width: '99%', height: '80px', resize: 'none'}} />
         </label>
       </div>
 

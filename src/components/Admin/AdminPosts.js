@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/AdminPage.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const AdminPosts = () => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
   const [category, setCategory] = useState('Organic Farming');
   const [language, setLanguage] = useState('English');
   const [posts, setPosts] = useState([]);
@@ -42,9 +42,10 @@ const AdminPosts = () => {
     try {
       const { data, error } = await supabase
         .from('blogs')
-        .select('id, title, description, category')
+        .select('id, title, description, category,created_at')
         .eq('category', category)
-        .eq('language', language);
+        .eq('language', language)
+        .order('created_at', { ascending: false });
 
       if (error) {
         console.error('Error fetching posts:', error);
@@ -127,9 +128,9 @@ const AdminPosts = () => {
           onChange={(e) => setCategory(e.target.value)}
         >
           <option value="Organic Farming">Organic Farming</option>
-          <option value="Animal husbandry">Animal husbandry</option>
-          <option value="Nourishment garden">Nourishment garden</option>
-          <option value="Food processing">Food processing</option>
+          <option value="Animal Husbandry">Animal Husbandry</option>
+          <option value="Nourishment Garden">Nourishment Garden</option>
+          <option value="Food Processing">Food Processing</option>
         </select>
       </div>
     <div className="existing-posts">
@@ -142,10 +143,11 @@ const AdminPosts = () => {
         </div>
       )}
       {posts.map((post) => (
+        <div className = "background-card">
         <div key={post.id} className="post-card">
           <h3>{post.title}</h3>
           <p>{post.description}</p>
-          <p>Category: {post.category}</p>
+          {/* <p>Category: {post.category}</p> */}
           <div className="post-actions">
             <button
               className="delete-button"
@@ -156,13 +158,23 @@ const AdminPosts = () => {
                   <div>Deleting Post</div>
                 </div>
               ) : (
-                'Delete'
+                <FontAwesomeIcon icon={faTrash} />
               )}
             </button>
             <button className="edit-button" onClick={() => handleEdit(post.id)}>
-              Edit
+            <FontAwesomeIcon icon={faEdit} />
             </button>
           </div>
+          <p style={{color:'white'}} className='date'>{`Created At: ${new Date(post.created_at).toLocaleString('en-US', {
+              day: 'numeric',
+              month: 'short',
+              year: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: true,
+            })}`}</p>
+        </div>
+        
         </div>
       ))}
 
