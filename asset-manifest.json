@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/ks-admin/static/css/main.38d44c73.css",
+    "main.js": "/ks-admin/static/js/main.31840668.js",
+    "static/js/289.b99ea155.chunk.js": "/ks-admin/static/js/289.b99ea155.chunk.js",
+    "static/js/787.561a8f4b.chunk.js": "/ks-admin/static/js/787.561a8f4b.chunk.js",
+    "index.html": "/ks-admin/index.html",
+    "main.38d44c73.css.map": "/ks-admin/static/css/main.38d44c73.css.map",
+    "main.31840668.js.map": "/ks-admin/static/js/main.31840668.js.map",
+    "289.b99ea155.chunk.js.map": "/ks-admin/static/js/289.b99ea155.chunk.js.map",
+    "787.561a8f4b.chunk.js.map": "/ks-admin/static/js/787.561a8f4b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.38d44c73.css",
+    "static/js/main.31840668.js"
+  ]
+}
