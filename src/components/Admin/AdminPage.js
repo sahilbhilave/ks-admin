@@ -1,6 +1,7 @@
 import React, { useEffect,useState } from 'react';
 import AdminPosts from './AdminPosts'; 
 import AdminWeather from './AdminWeather'; 
+import MarketProducts from '../Market/MarketProducts';
 import { useNavigate,useLocation } from 'react-router-dom';
 import '../Styles/AdminPage.css';
 import { createClient } from '@supabase/supabase-js';
@@ -70,11 +71,26 @@ const AdminPage = () => {
         >
           Weather
         </button>
+
+        <button
+          onClick={() => setSelectedTab('market')}
+          className={selectedTab === 'market' ? 'active-tab' : ''}
+        >
+          Market
+        </button>
+        <button
+          onClick={() => setSelectedTab('tourism')}
+          className={selectedTab === 'tourism' ? 'active-tab' : ''}
+        >
+          Tourism
+        </button>
       </div>
 
       <div className="tab-content">
-        {selectedTab === 'posts' && <AdminPosts />} {/* Render AdminPosts component */}
-        {selectedTab === 'weather' && <AdminWeather />} {/* Render AdminWeather component */}
+        {selectedTab === 'posts' && <AdminPosts />} 
+        {selectedTab === 'weather' && <AdminWeather />} 
+        {selectedTab === 'market' && <MarketProducts />} 
+        {selectedTab === 'tourism' && <AdminWeather />} 
       </div>
     </div>
   );

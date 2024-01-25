@@ -1,0 +1,10 @@
+.product-card {
+    background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  padding-bottom:30px;
+  padding-top:10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }

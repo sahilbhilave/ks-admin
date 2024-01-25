@@ -5,6 +5,7 @@ import LoginPage from './components/LoginPage';
 import AdminPage from './components/Admin/AdminPage';
 import Post from './components/Posts/Post';
 import EditPost from './components/Posts/EditPost';
+import MarketProducts from './components/Market/MarketProducts';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="/admin"  element={<AdminPage/>} />
           <Route path="/post"  element={<Post/>} />
           <Route path="/editpost"  element={<EditPost/>} />
+          <Route path="/market" elements={<MarketProducts/>}/>
           <Route path="*" element={<Navigate to="/" />} />
 
         </Routes>
