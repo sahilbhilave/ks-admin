@@ -1,1 +1,1 @@
-https://sahilbhilave.github.io/
+https://sahilbhilave.github.io/ks-admin/
